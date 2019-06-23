@@ -1,0 +1,26 @@
+{
+  "name": "insert-filecontent-into-markdown",
+  "description": "A markdown postprocessor for easy code example management.",
+  "version": "0.0.1",
+  "bin": {
+    "insert-filecontent-into-markdown": "lib/index.js",
+    "ifim": "lib/index.js"
+  },
+  "scripts": {
+    "build-md": "node lib/index.js example/example.template.md README.md --add-location-notice",
+    "build": "tsc"
+  },
+  "repository": "https://github.com/feirell/insert-filecontent-into-markdown.git",
+  "author": "Florian Völker <Neirolf2030@web.de>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^12.0.10",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0"
+  },
+  "files": [
+    "lib"
+  ]
+}
