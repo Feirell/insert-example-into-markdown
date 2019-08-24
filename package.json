@@ -7,7 +7,7 @@
     "ifim": "lib/index.js"
   },
   "scripts": {
-    "build-md": "node lib/index.js example/example.template.md README.md --add-location-notice",
+    "build-md": "node lib/index.js example/example.template.md README.template.md --add-location-notice",
     "build": "tsc"
   },
   "repository": "https://github.com/feirell/insert-filecontent-into-markdown.git",

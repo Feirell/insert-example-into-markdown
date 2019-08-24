@@ -14,52 +14,10 @@ If your file is named `*.template.md` this tool will create a corresponding `*.m
 This is an example of the usage of this package with the `*.template.md` naming.
 
 <!-- USEFILE: example\example.template.md -->
-``` md
-# This is an example file
-
-
-<!-- USEFILE: test.txt -->
-
-This is some other text.
-
-This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
-
-<!-- USEFILE: test.txt -->```js```
-<!-- USEFILE: test.txt -->
-```
-*You can find this in `example\example.template.md`*
 
 Which results in
 
 <!-- USEFILE: example\example.md -->
-~~~ md
-# This is an example file
-
-
-<!-- USEFILE: test.txt -->
-``` txt
-This is some text!
-```
-*You can find this in `test.txt`*
-
-This is some other text.
-
-This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
-
-<!-- USEFILE: test.txt -->
-``` js
-This is some text!
-```
-*You can find this in `test.txt`*
-
-<!-- USEFILE: test.txt -->
-``` txt
-This is some text!
-```
-*You can find this in `test.txt`*
-
-~~~
-*You can find this in `example\example.md`*
 
 Actually this README uses the template alternative.
 
