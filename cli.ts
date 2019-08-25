@@ -5,7 +5,7 @@ import * as minimist from "minimist";
 
 import { Error as ChainableError } from "chainable-error";
 
-import { processPair, makePathRelative, makePathAbsoluteToCWD } from ".";
+import { processPair, makePathRelative, makeToProcessorFromString } from ".";
 
 const ADD_NOTICE = "add-location-notice";
 const ADDITIONAL_PATHS = "paths";
@@ -33,85 +33,17 @@ if (nonUsedOptions.length > 0)
       nonUsedOptions.map(v => '"' + v + '"').join(",")
   );
 
-let customPreProcessor = (str: string) => str;
-if (argv[CUSTOM_PRE_PROCESS]) {
-  try {
-    const compiled = new Function("return " + argv[CUSTOM_PRE_PROCESS] + ";")();
-    if (typeof compiled != "function")
-      throw new Error(
-        "the given " +
-          CUSTOM_PRE_PROCESS +
-          " was not a function but " +
-          typeof compiled
-      );
+const ensureArray = <T>(arg: T | T[]) => (Array.isArray(arg) ? arg : [arg]);
 
-    if (typeof compiled("") != "string")
-      throw new Error(
-        "the given " +
-          CUSTOM_PRE_PROCESS +
-          ' does not return a string for the input ""'
-      );
+let customPreProcessors = [];
 
-    customPreProcessor = str => {
-      try {
-        return compiled(str);
-      } catch (e) {
-        throw new ChainableError(
-          "the passed pre processor threw an error for the string:" +
-            "  " +
-            str.replace(/\n/g, "  \n"),
-          e
-        );
-      }
-    };
-  } catch (e) {
-    throw new ChainableError(
-      "could not use the given " + CUSTOM_PRE_PROCESS,
-      e
-    );
-  }
-}
+if (argv[CUSTOM_PRE_PROCESS])
+  for (const cpp of ensureArray(argv[CUSTOM_PRE_PROCESS]))
+    customPreProcessors.push(makeToProcessorFromString(cpp));
 
-if (argv[CUSTOM_PRE_PROCESS_PATH]) {
-  const assembledPath = makePathAbsoluteToCWD(argv[CUSTOM_PRE_PROCESS_PATH]);
-  try {
-    const loaded = require(assembledPath);
-    if (typeof loaded != "function")
-      throw new Error(
-        "the given " +
-          CUSTOM_PRE_PROCESS_PATH +
-          " was not a function but " +
-          typeof loaded
-      );
-
-    if (typeof loaded("") != "string")
-      throw new Error(
-        "the given " +
-          CUSTOM_PRE_PROCESS_PATH +
-          ' does not return a string for the input ""'
-      );
-
-    customPreProcessor = str => {
-      try {
-        return loaded(str);
-      } catch (e) {
-        throw new ChainableError(
-          'the loaded pre processor threw an error for the string "' +
-            "  " +
-            str.replace(/\n/g, "  \n"),
-          e
-        );
-      }
-    };
-  } catch (e) {
-    throw new ChainableError(
-      'could not use the given custom preprocessor file "' +
-        assembledPath +
-        '"',
-      e
-    );
-  }
-}
+if (argv[CUSTOM_PRE_PROCESS_PATH])
+  for (const cppp of ensureArray(argv[CUSTOM_PRE_PROCESS_PATH]))
+    customPreProcessors.push(makeToProcessorFromString(cppp));
 
 let additionPaths: string[][] = [];
 if (argv[ADDITIONAL_PATHS]) {
@@ -132,7 +64,7 @@ if (argv[ADDITIONAL_PATHS]) {
 
 const files = argv._.map(makePathRelative) as string[];
 
-const chainExec = <T, U, R = T>(
+const getFirstNonContinue = <T, U, R = T>(
   continueOn: U,
   functions: ((val: T) => U | R)[]
 ) => (val: T) => {
@@ -144,7 +76,7 @@ const chainExec = <T, U, R = T>(
   return continueOn;
 };
 
-const pathTemplateTransformer = chainExec<string, null>(null, [
+const pathTemplateTransformer = getFirstNonContinue<string, null>(null, [
   p => {
     const parsed = path.parse(p);
     const matches = /^(.+)\.template\.(?:md)$/i.exec(parsed.base);
@@ -174,5 +106,5 @@ files
   })
   .concat(additionPaths)
   .forEach(([inputPath, outputPath]) =>
-    processPair(inputPath, outputPath, customPreProcessor, addNotice, true)
+    processPair(inputPath, outputPath, customPreProcessors, addNotice, true)
   );

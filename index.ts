@@ -2,6 +2,8 @@ import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import { EOL } from "os";
 
+import { Error as ChainableError } from "chainable-error";
+
 const cwd = process.cwd();
 
 export const makePathAbsoluteToCWD = (p: string) => path.resolve(cwd, p);
@@ -15,7 +17,7 @@ const postNoticeString = "`*";
 const codeBlockMatcher = new RegExp(
   [
     "(?<=\\n|\\r\\n|^)",
-    "<!-- USEFILE: ?(.+?) -->",
+    "<!--\\s*USEFILE:\\s*((?:.|\\s)+?)(?:\\s*;\\s*(.+?))?\\s*-->",
     "(?:\\r?\\n)?",
     "(?:(?:``` ?([a-zA-Z-]*).*?```)|(?:~~~ ?([a-zA-Z-]*).*?~~~))?",
     "(?:" +
@@ -39,10 +41,70 @@ const getLineEnding = string => {
   return EOL;
 };
 
+export interface Processor {
+  (
+    snippet: string,
+    inputPath: string,
+    outputPath: string,
+    replacePath: string
+  ): string;
+}
+
+const indentString = (str: string, depth = 2) => {
+  const indent = "\n" + " ".repeat(depth);
+  return indent + str.replace(/\n/g, indent);
+};
+
+const testFunctionalityAndWrap = (compiled: any) => {
+  if (typeof compiled != "function")
+    throw new Error(
+      "the given processor was not a function but " + typeof compiled
+    );
+
+  return ((snippet, inputPath, outputPath, replacePath) => {
+    try {
+      return compiled(snippet, inputPath, outputPath, replacePath);
+    } catch (e) {
+      throw new ChainableError(
+        "the passed pre processor threw an error for the file content fo '" +
+          replacePath +
+          "' string:" +
+          indentString(snippet),
+        e
+      );
+    }
+  }) as Processor;
+};
+
+export const makeToProcessorFromString = (
+  str: string,
+  processorName: string = "processor"
+) => {
+  try {
+    return testFunctionalityAndWrap(new Function("return " + str + ";")());
+  } catch (e) {
+    throw new ChainableError("could not use the given " + processorName, e);
+  }
+};
+
+export const makeToProcessorFromFile = (path: string) => {
+  const assembledPath = makePathAbsoluteToCWD(path);
+  try {
+    return testFunctionalityAndWrap(require(assembledPath));
+  } catch (e) {
+    throw new ChainableError(
+      'could not use the given custom preprocessor file "' +
+        assembledPath +
+        '"',
+      e
+    );
+  }
+};
+
 export function processPair(
   inputPath: string,
   outputPath: string,
-  customPreProcessor = (str: string) => str,
+  customPreProcessors: Processor[] = [],
   addNotice = true,
   log = false
 ) {
@@ -60,30 +122,55 @@ export function processPair(
         replacingFilePath
       );
 
-      const replaceContent = customPreProcessor(
-        readFileSync(actualLocation, "utf8").replace(/\r?\n/g, lineEnding)
+      const inlineProcessor: Processor | null = matching[2]
+        ? makeToProcessorFromString(matching[2], "inline processor")
+        : null;
+
+      const initialReadSnipped = readFileSync(actualLocation, "utf8").replace(
+        /\r?\n/g,
+        lineEnding
+      );
+
+      const allProcessors: Processor[] = inlineProcessor
+        ? [inlineProcessor, ...customPreProcessors]
+        : customPreProcessors;
+
+      const processedSnipped = allProcessors.reduce(
+        (p, c) => c(p, inputPath, outputPath, actualLocation),
+        initialReadSnipped
       );
 
       const postfix = addNotice
         ? lineEnding + preNoticeString + replacingFilePath + postNoticeString
         : "";
 
-      const type = matching[2] || path.parse(replacingFilePath).ext.slice(1);
-      const delimiter = /^\s*```?\s*$/m.test(replaceContent) ? "~~~" : "```";
+      const type = matching[3] || path.parse(replacingFilePath).ext.slice(1);
+      const delimiter = /^\s*```?\s*$/m.test(processedSnipped) ? "~~~" : "```";
 
       if (log)
-        console.log('inserting snippet from "' + replacingFilePath + '"');
+        console.log(
+          'inserting snippet from "' +
+            replacingFilePath +
+            '"' +
+            (allProcessors.length > 0
+              ? ", applying " + allProcessors.length + " processor(s)"
+              : "") +
+            (allProcessors.length > 0 && processedSnipped == initialReadSnipped
+              ? " which made no changes"
+              : "")
+        );
 
       return (
         "<!-- USEFILE: " +
         replacingFilePath +
+        (matching[2] ? "; " + matching[2] : "") +
         " -->" +
         lineEnding +
         delimiter +
         " " +
         type +
         lineEnding +
-        replaceContent +
+        processedSnipped +
         lineEnding +
         delimiter +
         postfix +

@@ -8,4 +8,4 @@ This is some other text.
 This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
 
 <!-- USEFILE: test.txt -->```js```
-<!-- USEFILE: test.txt -->
+<!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
