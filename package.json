@@ -1,7 +1,7 @@
 {
   "name": "insert-filecontent-into-markdown",
   "description": "A markdown postprocessor for easy code example management.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": {
     "insert-filecontent-into-markdown": "lib/cli.js",
     "ifim": "lib/cli.js"
