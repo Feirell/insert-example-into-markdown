@@ -3,7 +3,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "description": "A markdown postprocessor for easy code example management.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "bin": {
     "insert-filecontent-into-markdown": "lib/cli.js",
     "ifim": "lib/cli.js"
