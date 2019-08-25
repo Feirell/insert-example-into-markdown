@@ -79,7 +79,7 @@ Actually this README uses the template alternative.
 
 You can provide custom processors which will be called on each code block inserted. There are three ways to define those.
 
-1. One is to attach them to the comment block, like so: `<!-- USEFILE: ./some-path.js; str => str.slice(0, 20)-->` or a have a look at the `README.template.md` where this is also used.
+1. One is to attach them to the comment block, like so: `<!-- USEFILE: ./some-path.js; str => str.slice(0, 20)-->` (have a look at the `README.template.md` where this is also used).
 2. Another is to provided it with the `--preprocessor` CLI option (see below).
 3. The last one is to provide a file path with the `--preprocessorPath` CLI option (see below).
 
