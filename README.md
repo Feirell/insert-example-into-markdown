@@ -26,7 +26,7 @@ The full syntax is
 This is an example of the usage of this package with the `*.template.md` naming.
 
 <!-- USEFILE: example\example.template.md -->
-``` md
+~~~ md
 # This is an example file
 
 
@@ -38,7 +38,7 @@ This tool will infer the type of the inserted code from the file ending, if you 
 
 <!-- USEFILE: test.txt -->```js```
 <!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
-```
+~~~
 *You can find this in `example\example.template.md`*
 
 Which results in

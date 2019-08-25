@@ -145,7 +145,7 @@ export function processPair(
         : "";
 
       const type = matching[3] || path.parse(replacingFilePath).ext.slice(1);
-      const delimiter = /^\s*```?\s*$/m.test(processedSnipped) ? "~~~" : "```";
+      const delimiter = /```/m.test(processedSnipped) ? "~~~" : "```";
 
       if (log)
         console.log(
