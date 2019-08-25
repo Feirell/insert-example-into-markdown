@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.10.tgz#51babf9c7deadd5343620055fc8aff7995c8b031"
   integrity sha512-LcsGbPomWsad6wmMNv7nBLw7YYYyfdYcz6xryKYQhx89c3XXan+8Q6AJ43G5XDIaklaVkK3mE4fCb0SBvMiPSQ==
 
+chainable-error@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/chainable-error/-/chainable-error-1.0.0.tgz#ab4705e0f0aa183181e6699cf309a62864fc614b"
+  integrity sha512-wRBCdn3bIIuCSQPZUs2ZifOdEiOQh3li7Scks40eYKRZDufTA7HazIEvttgZNjg6gDKobCjQ2SjWGV7Pq2fIPw==
+
 minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"

@@ -25,7 +25,7 @@ This is some other text.
 This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
 
 <!-- USEFILE: test.txt -->```js```
-<!-- USEFILE: test.txt -->
+<!-- USEFILE: test.txt -->nice!
 ```
 *You can find this in `example\example.template.md`*
 
@@ -38,7 +38,7 @@ Which results in
 
 <!-- USEFILE: test.txt -->
 ``` txt
-This is some text!
+This is some text!nice!
 ```
 *You can find this in `test.txt`*
 
@@ -48,16 +48,16 @@ This tool will infer the type of the inserted code from the file ending, if you 
 
 <!-- USEFILE: test.txt -->
 ``` js
-This is some text!
+This is some text!nice!
 ```
 *You can find this in `test.txt`*
 
 <!-- USEFILE: test.txt -->
 ``` txt
-This is some text!
+This is some text!nice!
 ```
 *You can find this in `test.txt`*
-
+nice!
 ~~~
 *You can find this in `example\example.md`*
 
