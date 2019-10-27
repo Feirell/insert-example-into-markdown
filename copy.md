@@ -41,6 +41,7 @@ This tool will infer the type of the inserted code from the file ending, if you 
 ~~~
 
 
+
 Which results in
 
 <!-- USEFILE: example\example.md -->
@@ -66,6 +67,7 @@ This is some text!
 
 <!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
 ~~~
+
 
 
 Actually this README uses the template alternative.
@@ -95,6 +97,7 @@ interface Processor {
   ): string;
 }
 ```
+
 
 
 ## CLI

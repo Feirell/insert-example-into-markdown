@@ -1,0 +1,4 @@
+
+benutze den command um heraus zu bekommen was du anpassen musst damit in place und template keine änderung bei erneutem ausführen erzeugt:
+
+git checkout copy.md README.md && node ./lib/cli.js copy.md README.template.md

@@ -5,7 +5,11 @@ import * as minimist from "minimist";
 
 import { Error as ChainableError } from "chainable-error";
 
-import { processPair, makePathRelative, makeToProcessorFromString } from ".";
+import {
+  processPair,
+  makePathRelative,
+  makeToProcessorFromString
+} from "./index";
 
 const ADD_NOTICE = "add-location-notice";
 const ADDITIONAL_PATHS = "paths";

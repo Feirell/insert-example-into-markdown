@@ -18,7 +18,8 @@ const codeBlockMatcher = new RegExp(
   [
     "(?<=\\n|\\r\\n|^)",
     "<!--\\s*USEFILE:\\s*((?:.|\\s)+?)(?:\\s*;\\s*(.+?))?\\s*-->",
-    "(?:\\r?\\n)?",
+    "(\\r?\\n)?",
+    // "(?:\\r?\\n)?",
     "(?:(?:``` ?([a-zA-Z-]*).*?```)|(?:~~~ ?([a-zA-Z-]*).*?~~~))?",
     "(?:" +
       [
@@ -116,6 +117,9 @@ export function processPair(
   const replacedContent = fileContent.replace(
     codeBlockMatcher,
     (...matching) => {
+      console.log(
+        matching.map((v, i) => [i, typeof v == "string" ? v.slice(0, 20) : v])
+      );
       const replacingFilePath = makePathRelative(matching[1]);
       const actualLocation = path.join(
         path.parse(inputPath).dir,
@@ -144,7 +148,7 @@ export function processPair(
         ? lineEnding + preNoticeString + replacingFilePath + postNoticeString
         : "";
 
-      const type = matching[3] || path.parse(replacingFilePath).ext.slice(1);
+      const type = matching[4] || path.parse(replacingFilePath).ext.slice(1);
       const delimiter = /```/m.test(processedSnipped) ? "~~~" : "```";
 
       if (log)
@@ -165,7 +169,7 @@ export function processPair(
         replacingFilePath +
         (matching[2] ? "; " + matching[2] : "") +
         " -->" +
-        lineEnding +
+        (matching[3] ? lineEnding : "") +
         delimiter +
         " " +
         type +

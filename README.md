@@ -39,7 +39,6 @@ This tool will infer the type of the inserted code from the file ending, if you 
 <!-- USEFILE: test.txt -->```js```
 <!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
 ~~~
-*You can find this in `example\example.template.md`*
 
 Which results in
 
@@ -48,7 +47,7 @@ Which results in
 # This is an example file
 
 
-<!-- USEFILE: test.txt -->
+<!-- USEFILE: test.txt; undefined -->
 ``` txt
 This is some text!
 ```
@@ -58,20 +57,14 @@ This is some other text.
 
 This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
 
-<!-- USEFILE: test.txt -->
+<!-- USEFILE: test.txt; undefined -->
 ``` js
 This is some text!
 ```
 *You can find this in `test.txt`*
 
 <!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
-``` txt
-This is some other text!
-```
-*You can find this in `test.txt`*
-
 ~~~
-*You can find this in `example\example.md`*
 
 Actually this README uses the template alternative.
 
@@ -100,7 +93,6 @@ interface Processor {
   ): string;
 }
 ```
-*You can find this in `index.ts`*
 
 ## CLI
 
