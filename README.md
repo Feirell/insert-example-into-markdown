@@ -7,7 +7,7 @@ This package is a markdown postprocessor which is meant to help with creating an
 You just write your markdown and put placeholder where you want to put other files content.
 
 The overwrite / create behavior is driven by a internal ruleset which is based on the input filenames.
-If your file is named `*.template.md` this tool will create a corresponding `*.md` which is handy if you only want to include the `*.template.md` file into your code repository. If you list a file which does not fit this pattern it will replace this file with the generated version.
+If your file is named `template.*.md` this tool will create a corresponding `*.md` which is handy if you only want to include the `*.template.md` file into your code repository. If you list a file which does not fit this pattern it will replace this file with the generated version.
 
 The full syntax is
 
@@ -25,7 +25,7 @@ The full syntax is
 
 This is an example of the usage of this package with the `*.template.md` naming.
 
-<!-- USEFILE: example\example.template.md -->
+<!-- USEFILE: example\template.example.md -->
 ~~~ md
 # This is an example file
 
@@ -39,6 +39,7 @@ This tool will infer the type of the inserted code from the file ending, if you 
 <!-- USEFILE: test.txt -->```js```
 <!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
 ~~~
+*You can find this in `example\template.example.md`*
 
 Which results in
 
@@ -47,7 +48,7 @@ Which results in
 # This is an example file
 
 
-<!-- USEFILE: test.txt; undefined -->
+<!-- USEFILE: test.txt -->
 ``` txt
 This is some text!
 ```
@@ -57,14 +58,18 @@ This is some other text.
 
 This tool will infer the type of the inserted code from the file ending, if you explicitly add a code block it will use the given type.
 
-<!-- USEFILE: test.txt; undefined -->
-``` js
+<!-- USEFILE: test.txt -->``` js
 This is some text!
 ```
 *You can find this in `test.txt`*
 
-<!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->
+<!-- USEFILE: test.txt; str => str.replace('text', 'other text') -->``` txt
+This is some other text!
+```
+*You can find this in `test.txt`*
+
 ~~~
+*You can find this in `example\example.md`*
 
 Actually this README uses the template alternative.
 
@@ -93,6 +98,7 @@ interface Processor {
   ): string;
 }
 ```
+*You can find this in `index.ts`*
 
 ## CLI
 

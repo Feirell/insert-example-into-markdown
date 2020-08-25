@@ -7,7 +7,7 @@ This package is a markdown postprocessor which is meant to help with creating an
 You just write your markdown and put placeholder where you want to put other files content.
 
 The overwrite / create behavior is driven by a internal ruleset which is based on the input filenames.
-If your file is named `*.template.md` this tool will create a corresponding `*.md` which is handy if you only want to include the `*.template.md` file into your code repository. If you list a file which does not fit this pattern it will replace this file with the generated version.
+If your file is named `template.*.md` this tool will create a corresponding `*.md` which is handy if you only want to include the `*.template.md` file into your code repository. If you list a file which does not fit this pattern it will replace this file with the generated version.
 
 The full syntax is
 
@@ -25,7 +25,7 @@ The full syntax is
 
 This is an example of the usage of this package with the `*.template.md` naming.
 
-<!-- USEFILE: example\example.template.md -->
+<!-- USEFILE: example\template.example.md -->
 
 Which results in
 

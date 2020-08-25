@@ -25,7 +25,7 @@ The full syntax is
 
 This is an example of the usage of this package with the `*.template.md` naming.
 
-<!-- USEFILE: example\example.template.md -->
+<!-- USEFILE: example\template.example.md -->
 ~~~ md
 # This is an example file
 

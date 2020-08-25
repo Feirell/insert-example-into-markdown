@@ -83,7 +83,7 @@ const getFirstNonContinue = <T, U, R = T>(
 const pathTemplateTransformer = getFirstNonContinue<string, null>(null, [
   p => {
     const parsed = path.parse(p);
-    const matches = /^(.+)\.template\.(?:md)$/i.exec(parsed.base);
+    const matches = /^template\.(.+)\.md$/i.exec(parsed.base);
     if (matches == null) return null;
 
     return path.join(parsed.dir, matches[1] + ".md");
