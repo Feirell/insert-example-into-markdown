@@ -117,9 +117,6 @@ export function processPair(
   const replacedContent = fileContent.replace(
     codeBlockMatcher,
     (...matching) => {
-      console.log(
-        matching.map((v, i) => [i, typeof v == "string" ? v.slice(0, 20) : v])
-      );
       const replacingFilePath = makePathRelative(matching[1]);
       const actualLocation = path.join(
         path.parse(inputPath).dir,
